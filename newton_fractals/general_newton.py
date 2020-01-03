@@ -6,8 +6,6 @@ import numpy as np
 from PIL import Image
 from time import time
 import matplotlib.cm as cm
-from colourlovers import ColourLovers
-
 
 def complex_grid(re_lim, re_num, im_lim, im_num):
     # create 2D array of complex numbers
@@ -17,6 +15,7 @@ def complex_grid(re_lim, re_num, im_lim, im_num):
     Z = Re + 1j * Im
 
     return Z
+
 
 """============================================================
 newton_method()
@@ -39,7 +38,9 @@ newton_method()
 
 ============================================================"""
 
-def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35, a=1.0, disp_time=True, known_roots=None):
+
+def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35, a=1.0, disp_time=True,
+                  known_roots=None):
     # record run time
     if disp_time:
         start = time()
@@ -60,7 +61,7 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35,
 
         # print iteration
         if disp_time:
-            print 'Iteration ' + str(i+1)
+            print('Iteration ' + str(i + 1))
 
         # update newton step
         Z_new = Z_old - a * (f_val(Z_old, **params) / df_val(Z_old, **params))
@@ -90,8 +91,8 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35,
             break
 
     # reshape arrays and create one to store root numbers
-    con_num = con_num.reshape((im_num,re_num))
-    con_val = con_val.reshape((im_num,re_num))
+    con_num = con_num.reshape((im_num, re_num))
+    con_val = con_val.reshape((im_num, re_num))
     con_root = np.nan * np.ones((im_num, re_num))
 
     # determine roots of function
@@ -143,14 +144,15 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35,
         elapsed = time() - start
         m, s = divmod(elapsed, 60)
         h, m = divmod(m, 60)
-        print "Run time: " + "%d:%02d:%02d" % (h, m, s)
+        print("Run time: " + "%d:%02d:%02d" % (h, m, s))
         if iter_reached == max_iter:
-            print "Maximum iteration reached -- " + str(max_iter)
+            print("Maximum iteration reached -- " + str(max_iter))
         else:
-            print "Last iteration was " + str(i)
+            print("Last iteration was " + str(i))
 
     # return results
     return roots, con_root, con_num
+
 
 # function to convert hex to rgb
 def hex_to_rgb(value):
@@ -158,35 +160,28 @@ def hex_to_rgb(value):
     lv = len(value)
     return [int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3)]
 
-def config_colors(col_source, col_params):
 
+def config_colors(col_source, col_params):
     # get palette from matplotlib
     if col_source == 'matplotlib':
         try:
             num_col = col_params['col_num']
             step = 256 / num_col
             cmap = cm.get_cmap(col_params['cmap'], 256)
-            colors = 255 * cmap(np.arange(0, 256, step))[:,:-1]
+            colors = 255 * cmap(np.arange(0, 256, step))[:, :-1]
             colors = colors.astype(int)
         except ValueError:
-            print 'Colormap not recognized -- using default color scheme'
+            print('Colormap not recognized -- using default color scheme')
             colors = [[0, 255, 255], [128, 128, 255], [255, 0, 255], [255, 128, 128]]
             colors = np.array(colors)
 
-    # get palette from www.colourlovers.com
-    elif col_source == 'colourlovers':
-            cl = ColourLovers()
-            palette = cl.palettes(**col_params)[0]
-            colors = palette.colours
-            for i in range(len(colors)):
-                colors[i] = hex_to_rgb(colors[i])
-            colors = np.array(colors)
     else:
-        print 'Color source not recognized -- using default color scheme'
+        print('Color source not recognized -- using default color scheme')
         colors = [[0, 255, 255], [128, 128, 255], [255, 0, 255], [255, 128, 128]]
         colors = np.array(colors)
 
     return colors
+
 
 """============================================================
 newton_plot()
@@ -204,8 +199,8 @@ newton_plot()
 
 ============================================================"""
 
-def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
 
+def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
     # get number of real and imaginary points
     im_num, re_num = con_root.shape
 
@@ -214,7 +209,7 @@ def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
 
     # get number of colors
     c_num = len(colors)
-    colors = np.array(colors) # numpy array
+    colors = np.array(colors)  # numpy array
 
     # configure shading
     if max_shade == None:
@@ -227,7 +222,7 @@ def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
 
             # color diverged points black
             if np.isnan(root_num):
-                data[i * re_num + j] = (0, 0, 0) # divergent points
+                data[i * re_num + j] = (0, 0, 0)  # divergent points
             else:
                 # color converged points according to color pallete
                 shade = float(max_shade - con_num[i, j]) / max_shade

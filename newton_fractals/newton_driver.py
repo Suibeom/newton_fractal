@@ -5,8 +5,8 @@
 # Program 
 
 import numpy as np
-import general_newton as gn
-import test_fun as tf
+from . import general_newton as gn
+from . import test_fun as tf
 
 # create grid of complex numbers
 re_lim = [-0.2, 0.2]
@@ -29,10 +29,10 @@ max_iter = 50
 roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=max_iter)
 
 # print computed roots
-print "Computed " + str(len(roots)) + " roots of " + f_val.__name__
+print("Computed " + str(len(roots)) + " roots of " + f_val.__name__)
 if len(roots) < 8:
     for root in roots:
-        print "%.4f \t+\t%.4fi" %(root.real, root.imag)
+        print("%.4f \t+\t%.4fi" %(root.real, root.imag))
 
 # plot newton fractal
 col_source = 'colourlovers'

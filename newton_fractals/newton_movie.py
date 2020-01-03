@@ -3,8 +3,8 @@
 #
 
 import numpy as np
-import general_newton as gn
-import test_fun as tf
+from . import general_newton as gn
+from . import test_fun as tf
 import subprocess
 import os
 import shutil
@@ -52,7 +52,7 @@ i = 1
 for a in a_seq:
     # print progress
     img_file_name = directory + '/' + imagename + '%05d' % i + '.png'
-    print 'Creating frame ' + str(i) + ' of ' + str(a_seq.size)
+    print('Creating frame ' + str(i) + ' of ' + str(a_seq.size))
     i += 1
 
     # newton's method
