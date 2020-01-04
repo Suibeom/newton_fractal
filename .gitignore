@@ -7,3 +7,9 @@
 # ignore large media
 newton_fractals/fractal_pictures/
 newton_fractals/fractal_videos/
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/newton_fractals.iml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml

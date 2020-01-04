@@ -213,7 +213,7 @@ newton_plot()
 ============================================================"""
 
 
-#@jit(parallel=True)
+@jit(parallel=True)
 def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
     # get number of real and imaginary points
     im_num, re_num = con_root.shape
