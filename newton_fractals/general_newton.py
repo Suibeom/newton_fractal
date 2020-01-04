@@ -48,6 +48,16 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10,
         start = time()
 
     # put in different form for increased computation speed
+
+    con_num, con_val = run_newton_iterations(Z, f_val, df_val, params, max_iter, tol, div_val, a)
+    im_num, re_num = Z.shape
+    con_root = np.nan * np.ones((im_num, re_num))
+    roots, con_root = process_roots(con_val, con_root, known_roots, tol, im_num, re_num)
+
+    return roots, con_root, con_num
+
+
+def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0):
     im_num, re_num = Z.shape
     total_num = re_num * im_num
     ind = np.arange(total_num)
@@ -63,8 +73,6 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10,
     for i in range(1, max_iter):
 
         # print iteration
-        if disp_time:
-            print('Iteration ' + str(i + 1))
 
         # update newton step
         Z_new = Z_old - a * (f_val(Z_old, **params) / df_val(Z_old, **params))
@@ -106,11 +114,10 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10,
     # reshape arrays and create one to store root numbers
     con_num = con_num.reshape((im_num, re_num))
     con_val = con_val.reshape((im_num, re_num))
-    con_root = np.nan * np.ones((im_num, re_num))
+    return con_num, con_val
 
-    # determine roots of function
 
-    # if the roots are known
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
     if known_roots is not None:
 
         # look for converged values close to known roots
@@ -151,20 +158,7 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10,
         # report the found roots as mean of nearby points
         for i in range(len(roots_list)):
             roots[i] = np.mean(np.array(roots_list[i], dtype='complex'), dtype='complex')
-
-    # print timing results
-    if disp_time:
-        elapsed = time() - start
-        m, s = divmod(elapsed, 60)
-        h, m = divmod(m, 60)
-        print("Run time: " + "%d:%02d:%02d" % (h, m, s))
-        if iter_reached == max_iter:
-            print("Maximum iteration reached -- " + str(max_iter))
-        else:
-            print("Last iteration was " + str(i))
-
-    # return results
-    return roots, con_root, con_num
+    return roots, con_root
 
 
 # function to convert hex to rgb
