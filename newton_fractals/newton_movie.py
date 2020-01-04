@@ -47,7 +47,7 @@ quality = 22 # the quality of the encoding
 colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128)]
 
 # generalized newton parameter, a
-a_seq = np.linspace(1.012, 1.003, 30)
+a_seq = np.linspace(1.007013, 1.00701, 30)
 
 # create image sequence
 i = 1
@@ -56,14 +56,14 @@ for a in a_seq:
     if disptime:
         start = time()
     img_file_name = directory + '/' + imagename + '%05d' % i + '.png'
-    print('Creating frame ' + str(i) + ' of ' + str(a_seq.size))
+    print('Creating frame ' + str(i) + ' of ' + str(a_seq.size) + ' with alpha ='+str(a))
     i += 1
 
     # newton's method
-    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=500, tol=1e-3, a=a, disp_time=False, known_roots=known_roots)
+    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=5000, tol=1e-3, a=a, disp_time=False, known_roots=known_roots)
 
     # create image in folder
-    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=500)
+    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=5000)
     if disptime:
         elapsed = time() - start
         m, s = divmod(elapsed, 60)

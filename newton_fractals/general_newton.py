@@ -245,7 +245,7 @@ def color_root(root_num, con_num, colors, c_num, max_shade):
     if np.isnan(root_num):
         return 0, 0, 0
     else:
-        shade = 1.0 - 2.0 ** (con_num - max_shade)
+        shade = 1.0 - 1.01 ** (con_num - max_shade)
         col = colors[int(root_num) % c_num, :]
         return np.round(col[0] * shade),np.round(col[1] * shade),np.round(col[2] * shade)
 
