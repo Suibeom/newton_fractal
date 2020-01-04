@@ -57,12 +57,23 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10,
     return roots, con_root, con_num
 
 
+@jit(nopython=True)
+def sqfrac(z_old, z_new):
+    numerator = z_old - z_new
+    return (np.imag(numerator)**2 + np.real(numerator)**2)/(np.imag(z_new)**2 + np.real(z_new)**2)
+
+@jit(nopython=True)
+def sqnorm(z):
+    return np.imag(z)**2 + np.real(z)**2
+
 def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0):
     im_num, re_num = Z.shape
     total_num = re_num * im_num
     ind = np.arange(total_num)
     Z_old = np.reshape(Z, (total_num))
     Z_mean = np.reshape(Z, (total_num))
+    tol_sq = tol**2
+    div_sq = div_val**2
 
     # create array for roots and iter_num
     con_val = np.nan * np.ones(Z_old.shape, dtype=complex)  # initialze NaN: diverge
@@ -78,11 +89,11 @@ def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_v
         Z_new = Z_old - a * (f_val(Z_old, **params) / df_val(Z_old, **params))
 
         # check for divergence
-        div = np.array(np.where(abs(Z) >= div_val))  # note: covers divide by zero errors
+        div = np.array(np.where(sqnorm(Z) >= div_sq))  # note: covers divide by zero errors
         con_num[ind[div]] = i
 
         # check for convergence
-        con = np.array(np.where(abs((Z_old - Z_new) / Z_new) < tol))
+        con = np.array(np.where(sqfrac(Z_old, Z_new) < tol_sq))
         con_val[ind[con]] = Z_new[con]
         con_num[ind[con]] = i
 
@@ -117,12 +128,13 @@ def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_v
     return con_num, con_val
 
 
+@jit(parallel=True)
 def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
     if known_roots is not None:
 
         # look for converged values close to known roots
         for j in range(len(known_roots)):
-            root_ind = np.where(abs(con_val - known_roots[j]) < tol)
+            root_ind = np.where(np.absolute(con_val - known_roots[j]) < tol)
             con_root[root_ind] = j
 
         # report the roots found
@@ -208,8 +220,7 @@ newton_plot()
 
 
 @jit(parallel=True)
-def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
-    # get number of real and imaginary points
+def rgb_fill(con_root, con_num, colors, max_shade):
     im_num, re_num = con_root.shape
 
     # initialize data tuple for image
@@ -225,17 +236,26 @@ def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
     # fill data tuple for image with RGB values
     for i in range(im_num):
         for j in range(re_num):
-            root_num = con_root[i, j]
+            data[i * re_num + j] = color_root(con_root[i, j], con_num[i, j], colors, c_num, max_shade)
 
-            # color diverged points black
-            if np.isnan(root_num):
-                data[i * re_num + j] = (0, 0, 0)  # divergent points
-            else:
-                # color converged points according to color pallete
-                shade = 1.0 - 2.0 ** (con_num[i, j] - max_shade)
-                col = np.round(colors[int(root_num) % c_num, :] * shade)
-                col = col.astype('int')
-                data[i * re_num + j] = tuple(col)
+    return data
+
+@jit(nopython=True)
+def color_root(root_num, con_num, colors, c_num, max_shade):
+    if np.isnan(root_num):
+        return 0, 0, 0
+    else:
+        shade = 1.0 - 2.0 ** (con_num - max_shade)
+        col = colors[int(root_num) % c_num, :]
+        return np.round(col[0] * shade),np.round(col[1] * shade),np.round(col[2] * shade)
+
+
+@jit(parallel=True)
+def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
+    # get number of real and imaginary points
+    im_num, re_num = con_root.shape
+
+    data = rgb_fill(con_root, con_num, colors, max_shade)
 
     # create image object and fill with RGB data
     img = Image.new("RGB", (re_num, im_num))

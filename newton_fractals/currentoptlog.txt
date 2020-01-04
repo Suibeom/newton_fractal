@@ -1,0 +1,276 @@
+/Users/Suibeom/.conda/envs/untitled/bin/python /Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/newton_movie.py
+Creating frame 1 of 30
+/Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py:127: NumbaWarning:
+Compilation is falling back to object mode WITH looplifting enabled because Function "process_roots" failed type inference due to: Invalid use of Function(<built-in function setitem>) with argument(s) of type(s): (array(float64, 2d, C), tuple(array(int64, 1d, C) x 2), int64)
+ * parameterized
+In definition 0:
+    All templates rejected with literals.
+In definition 1:
+    All templates rejected without literals.
+In definition 2:
+    All templates rejected with literals.
+In definition 3:
+    All templates rejected without literals.
+In definition 4:
+    All templates rejected with literals.
+In definition 5:
+    All templates rejected without literals.
+In definition 6:
+    All templates rejected with literals.
+In definition 7:
+    All templates rejected without literals.
+In definition 8:
+    NotImplementedError: only one advanced index supported
+    raised from /Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/typing/arraydecl.py:67
+In definition 9:
+    NotImplementedError: only one advanced index supported
+    raised from /Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/typing/arraydecl.py:67
+This error is usually caused by passing an argument of a type that is unsupported by the named function.
+[1] During: typing of setitem at /Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py (134)
+
+File "general_newton.py", line 134:
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+    <source elided>
+            root_ind = np.where(np.absolute(con_val - known_roots[j]) < tol)
+            con_root[root_ind] = j
+            ^
+
+  @jit(parallel=True)
+/Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py:127: NumbaWarning:
+Compilation is falling back to object mode WITHOUT looplifting enabled because Function "process_roots" failed type inference due to: cannot determine Numba type of <class 'numba.dispatcher.LiftedLoop'>
+
+File "general_newton.py", line 132:
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+    <source elided>
+        # look for converged values close to known roots
+        for j in range(len(known_roots)):
+        ^
+
+  @jit(parallel=True)
+/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/object_mode_passes.py:178: NumbaWarning: Function "process_roots" was compiled in object mode without forceobj=True, but has lifted loops.
+
+File "general_newton.py", line 128:
+@jit(parallel=True)
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+^
+
+  state.func_ir.loc))
+/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/object_mode_passes.py:187: NumbaDeprecationWarning:
+Fall-back from the nopython compilation path to the object mode compilation path has been detected, this is deprecated behaviour.
+
+For more information visit http://numba.pydata.org/numba-doc/latest/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit
+
+File "general_newton.py", line 128:
+@jit(parallel=True)
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+^
+
+  warnings.warn(errors.NumbaDeprecationWarning(msg, state.func_ir.loc))
+/Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py:127: NumbaWarning:
+Compilation is falling back to object mode WITHOUT looplifting enabled because Function "process_roots" failed type inference due to: Invalid use of Function(<built-in function setitem>) with argument(s) of type(s): (array(float64, 2d, C), tuple(array(int64, 1d, C) x 2), int64)
+ * parameterized
+In definition 0:
+    All templates rejected with literals.
+In definition 1:
+    All templates rejected without literals.
+In definition 2:
+    All templates rejected with literals.
+In definition 3:
+    All templates rejected without literals.
+In definition 4:
+    All templates rejected with literals.
+In definition 5:
+    All templates rejected without literals.
+In definition 6:
+    All templates rejected with literals.
+In definition 7:
+    All templates rejected without literals.
+In definition 8:
+    NotImplementedError: only one advanced index supported
+    raised from /Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/typing/arraydecl.py:67
+In definition 9:
+    NotImplementedError: only one advanced index supported
+    raised from /Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/typing/arraydecl.py:67
+This error is usually caused by passing an argument of a type that is unsupported by the named function.
+[1] During: typing of setitem at /Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py (134)
+
+File "general_newton.py", line 134:
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+    <source elided>
+            root_ind = np.where(np.absolute(con_val - known_roots[j]) < tol)
+            con_root[root_ind] = j
+            ^
+
+  @jit(parallel=True)
+/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/object_mode_passes.py:178: NumbaWarning: Function "process_roots" was compiled in object mode without forceobj=True.
+
+File "general_newton.py", line 132:
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+    <source elided>
+        # look for converged values close to known roots
+        for j in range(len(known_roots)):
+        ^
+
+  state.func_ir.loc))
+/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/object_mode_passes.py:187: NumbaDeprecationWarning:
+Fall-back from the nopython compilation path to the object mode compilation path has been detected, this is deprecated behaviour.
+
+For more information visit http://numba.pydata.org/numba-doc/latest/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit
+
+File "general_newton.py", line 132:
+def process_roots(con_val, con_root, known_roots, tol, im_num, re_num):
+    <source elided>
+        # look for converged values close to known roots
+        for j in range(len(known_roots)):
+        ^
+
+  warnings.warn(errors.NumbaDeprecationWarning(msg, state.func_ir.loc))
+/Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py:249: NumbaWarning:
+Compilation is falling back to object mode WITH looplifting enabled because Function "newton_plot" failed type inference due to: Unknown attribute 'new' of type Module(<module 'PIL.Image' from '/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/PIL/Image.py'>)
+
+File "general_newton.py", line 257:
+def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
+    <source elided>
+    # create image object and fill with RGB data
+    img = Image.new("RGB", (re_num, im_num))
+    ^
+
+[1] During: typing of get attribute at /Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py (257)
+
+File "general_newton.py", line 257:
+def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
+    <source elided>
+    # create image object and fill with RGB data
+    img = Image.new("RGB", (re_num, im_num))
+    ^
+
+  @jit(parallel=True)
+/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/object_mode_passes.py:178: NumbaWarning: Function "newton_plot" was compiled in object mode without forceobj=True.
+
+File "general_newton.py", line 250:
+@jit(parallel=True)
+def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
+^
+
+  state.func_ir.loc))
+/Users/Suibeom/.conda/envs/untitled/lib/python3.7/site-packages/numba/object_mode_passes.py:187: NumbaDeprecationWarning:
+Fall-back from the nopython compilation path to the object mode compilation path has been detected, this is deprecated behaviour.
+
+For more information visit http://numba.pydata.org/numba-doc/latest/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit
+
+File "general_newton.py", line 250:
+@jit(parallel=True)
+def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
+^
+
+  warnings.warn(errors.NumbaDeprecationWarning(msg, state.func_ir.loc))
+Run time: 0:00:03
+Creating frame 2 of 30
+Run time: 0:00:02
+Creating frame 3 of 30
+Run time: 0:00:02
+Creating frame 4 of 30
+Run time: 0:00:02
+Creating frame 5 of 30
+Run time: 0:00:02
+Creating frame 6 of 30
+Run time: 0:00:02
+Creating frame 7 of 30
+Run time: 0:00:02
+Creating frame 8 of 30
+Run time: 0:00:02
+Creating frame 9 of 30
+Run time: 0:00:02
+Creating frame 10 of 30
+Run time: 0:00:02
+Creating frame 11 of 30
+Run time: 0:00:02
+Creating frame 12 of 30
+Run time: 0:00:02
+Creating frame 13 of 30
+Run time: 0:00:03
+Creating frame 14 of 30
+Run time: 0:00:03
+Creating frame 15 of 30
+Run time: 0:00:04
+Creating frame 16 of 30
+/Users/Suibeom/PycharmProjects/newton_fractals/newton_fractals/general_newton.py:55: RuntimeWarning: invalid value encountered in less
+  roots, con_root = process_roots(con_val, con_root, known_roots, tol, im_num, re_num)
+Run time: 0:00:06
+Creating frame 17 of 30
+Run time: 0:00:07
+Creating frame 18 of 30
+Run time: 0:00:09
+Creating frame 19 of 30
+Run time: 0:00:10
+Creating frame 20 of 30
+Run time: 0:00:10
+Creating frame 21 of 30
+Run time: 0:00:10
+Creating frame 22 of 30
+Run time: 0:00:10
+Creating frame 23 of 30
+Run time: 0:00:10
+Creating frame 24 of 30
+Run time: 0:00:11
+Creating frame 25 of 30
+Run time: 0:00:14
+Creating frame 26 of 30
+Run time: 0:00:13
+Creating frame 27 of 30
+Run time: 0:00:12
+Creating frame 28 of 30
+Run time: 0:00:13
+Creating frame 29 of 30
+Run time: 0:00:10
+Creating frame 30 of 30
+Run time: 0:00:10
+ffmpeg version 4.1 Copyright (c) 2000-2018 the FFmpeg developers
+  built with Apple LLVM version 10.0.0 (clang-1000.11.45.5)
+  configuration: --prefix=/usr/local/Cellar/ffmpeg/4.1 --enable-shared --enable-pthreads --enable-version3 --enable-hardcoded-tables --enable-avresample --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libmp3lame --enable-libopus --enable-libsnappy --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-libxvid --enable-lzma --enable-opencl --enable-videotoolbox
+  libavutil      56. 22.100 / 56. 22.100
+  libavcodec     58. 35.100 / 58. 35.100
+  libavformat    58. 20.100 / 58. 20.100
+  libavdevice    58.  5.100 / 58.  5.100
+  libavfilter     7. 40.101 /  7. 40.101
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  3.100 /  5.  3.100
+  libswresample   3.  3.100 /  3.  3.100
+  libpostproc    55.  3.100 / 55.  3.100
+Input #0, image2, from 'fractal_videos/fractal_stills4/fractal%05d.png':
+  Duration: 00:00:01.20, start: 0.000000, bitrate: N/A
+    Stream #0:0: Video: png, rgb24(pc), 1000x1000, 25 fps, 25 tbr, 25 tbn, 25 tbc
+File 'newton_fractal4.avi' already exists. Overwrite ? [y/N] y
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0x7ff8b0007e00] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x7ff8b0007e00] profile High 4:4:4 Predictive, level 3.2, 4:4:4 8-bit
+Output #0, avi, to 'newton_fractal4.avi':
+  Metadata:
+    ISFT            : Lavf58.20.100
+    Stream #0:0: Video: h264 (libx264) (H264 / 0x34363248), yuv444p, 1000x1000, q=-1--1, 18 fps, 18 tbn, 18 tbc
+    Metadata:
+      encoder         : Lavc58.35.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: -1
+frame=   30 fps= 30 q=-1.0 Lsize=    1088kB time=00:00:01.55 bitrate=5728.9kbits/s speed=1.55x
+video:1082kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.580025%
+[libx264 @ 0x7ff8b0007e00] frame I:1     Avg QP:11.85  size: 63313
+[libx264 @ 0x7ff8b0007e00] frame P:8     Avg QP:22.57  size: 43684
+[libx264 @ 0x7ff8b0007e00] frame B:21    Avg QP:29.92  size: 33083
+[libx264 @ 0x7ff8b0007e00] consecutive B-frames:  6.7%  0.0%  0.0% 93.3%
+[libx264 @ 0x7ff8b0007e00] mb I  I16..4: 79.0%  0.0% 21.0%
+[libx264 @ 0x7ff8b0007e00] mb P  I16..4:  5.7%  0.0%  1.7%  P16..4:  6.4%  7.7%  6.4%  0.0%  0.0%    skip:72.1%
+[libx264 @ 0x7ff8b0007e00] mb B  I16..4:  0.4%  0.0%  0.6%  B16..8: 12.1%  7.5%  3.4%  direct: 2.4%  skip:73.6%  L0:50.2% L1:35.0% BI:14.8%
+[libx264 @ 0x7ff8b0007e00] direct mvs  spatial:66.7% temporal:33.3%
+[libx264 @ 0x7ff8b0007e00] coded y,u,v intra: 17.8% 14.6% 18.3% inter: 8.3% 2.4% 11.5%
+[libx264 @ 0x7ff8b0007e00] i16 v,h,dc,p: 89%  7%  4%  0%
+[libx264 @ 0x7ff8b0007e00] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 14% 35%  5%  5%  5%  5%  6%  7%
+[libx264 @ 0x7ff8b0007e00] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x7ff8b0007e00] ref P L0: 51.2%  2.7% 20.8% 15.5%  9.8%
+[libx264 @ 0x7ff8b0007e00] ref B L0: 62.4% 26.8%  9.1%  1.7%
+[libx264 @ 0x7ff8b0007e00] ref B L1: 87.0% 13.0%
+[libx264 @ 0x7ff8b0007e00] kb/s:5316.18
+
+Process finished with exit code 0
