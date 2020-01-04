@@ -5,8 +5,8 @@
 # Program 
 
 import numpy as np
-from . import general_newton as gn
-from . import test_fun as tf
+from newton_fractals import general_newton as gn
+from newton_fractals import test_fun as tf
 
 # create grid of complex numbers
 re_lim = [-0.2, 0.2]
@@ -48,7 +48,7 @@ col_params = {'lover': 'justjessi', 'keywords': 'groovy kind of xmas', 'cmap':'g
 
 colors = gn.config_colors(col_source, col_params)
 save_path = "fractal_pictures/frac_40.png"
-gn.newton_plot(con_root, con_num, colors, save_path)
+gn.newton_plot(con_root, con_num, colors, save_path, max_shade=50)
 
 # replace the above line with 
 #		gn.newton_plot(con_num, con_num, colors, save_path)

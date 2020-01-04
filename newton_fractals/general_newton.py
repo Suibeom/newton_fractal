@@ -3,9 +3,11 @@
 #
 
 import numpy as np
+from numba import jit
 from PIL import Image
 from time import time
 import matplotlib.cm as cm
+
 
 def complex_grid(re_lim, re_num, im_lim, im_num):
     # create 2D array of complex numbers
@@ -39,7 +41,7 @@ newton_method()
 ============================================================"""
 
 
-def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35, a=1.0, disp_time=True,
+def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0, disp_time=True,
                   known_roots=None):
     # record run time
     if disp_time:
@@ -50,6 +52,7 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35,
     total_num = re_num * im_num
     ind = np.arange(total_num)
     Z_old = np.reshape(Z, (total_num))
+    Z_mean = np.reshape(Z, (total_num))
 
     # create array for roots and iter_num
     con_val = np.nan * np.ones(Z_old.shape, dtype=complex)  # initialze NaN: diverge
@@ -57,7 +60,7 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35,
     iter_reached = max_iter
 
     # for the maximum number of iterations
-    for i in range(max_iter):
+    for i in range(1, max_iter):
 
         # print iteration
         if disp_time:
@@ -75,14 +78,24 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e35,
         con_val[ind[con]] = Z_new[con]
         con_num[ind[con]] = i
 
+        # Z_new_mean = Z_mean * ((i + 1) / i) + Z_new / (i + 1)
+        # check for convergence in mean
+        # if i > 2:
+        #    con = np.array(np.where(abs((Z_mean-Z_new_mean)/Z_new_mean) < tol))
+        #    print("Convergence in mean occurred")
+        #    con_val[ind[con]] = Z_new_mean[con]
+        #    con_num[ind[con]] = i
+
         # update iterate
         Z_old = Z_new
+        # Z_mean = Z_new_mean
 
         # remove converged and diverged points
         mask = np.ones(Z_old.shape, dtype=bool)
         mask[div] = 0
         mask[con] = 0
         Z_old = Z_old[mask]
+        # Z_mean = Z_mean[mask]
         ind = ind[mask]
 
         # break if all points have converged or diverged
@@ -200,6 +213,7 @@ newton_plot()
 ============================================================"""
 
 
+#@jit(parallel=True)
 def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
     # get number of real and imaginary points
     im_num, re_num = con_root.shape
@@ -212,9 +226,8 @@ def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
     colors = np.array(colors)  # numpy array
 
     # configure shading
-    if max_shade == None:
-        max_shade = float(np.max(con_num[np.where(np.isfinite(con_root))]))
-
+    if max_shade is None:
+        max_shade = 50
     # fill data tuple for image with RGB values
     for i in range(im_num):
         for j in range(re_num):
@@ -225,8 +238,8 @@ def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
                 data[i * re_num + j] = (0, 0, 0)  # divergent points
             else:
                 # color converged points according to color pallete
-                shade = float(max_shade - con_num[i, j]) / max_shade
-                col = np.round(colors[root_num % c_num, :] * shade)
+                shade = 1.0 - 2.0 ** (con_num[i, j] - max_shade)
+                col = np.round(colors[int(root_num) % c_num, :] * shade)
                 col = col.astype('int')
                 data[i * re_num + j] = tuple(col)
 

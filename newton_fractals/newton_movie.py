@@ -3,16 +3,18 @@
 #
 
 import numpy as np
-from . import general_newton as gn
-from . import test_fun as tf
+from newton_fractals import general_newton as gn
+from newton_fractals import test_fun as tf
 import subprocess
 import os
 import shutil
+from time import time
 
 # movie to be created
-directory = "fractal_videos/fractal_stills2"
-filename = "newton_fractal2.avi"
+directory = "fractal_videos/fractal_stills4"
+filename = "newton_fractal4.avi"
 imagename = "fractal"
+disptime = True
 
 # create directory
 if not os.path.exists(directory):
@@ -22,9 +24,9 @@ else:
 	os.makedirs(directory)
 
 # create grid of complex numbers
-re_lim = [-5, 5]
+re_lim = [-0.25, 0.25]
 re_num = 1000
-im_lim = [-5, 5]
+im_lim = [-0.25, 0.25]
 im_num = 1000
 Z = gn.complex_grid(re_lim, re_num, im_lim, im_num)
 
@@ -45,22 +47,28 @@ quality = 22 # the quality of the encoding
 colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128)]
 
 # generalized newton parameter, a
-a_seq = np.linspace(1.5, 0.6, 600)
+a_seq = np.linspace(1.012, 1.003, 30)
 
 # create image sequence
 i = 1
 for a in a_seq:
     # print progress
+    if disptime:
+        start = time()
     img_file_name = directory + '/' + imagename + '%05d' % i + '.png'
     print('Creating frame ' + str(i) + ' of ' + str(a_seq.size))
     i += 1
 
     # newton's method
-    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, a=a, disp_time=False, known_roots=known_roots)
+    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=500, tol=1e-3, a=a, disp_time=False, known_roots=known_roots)
 
     # create image in folder
-    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name)
-
+    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=500)
+    if disptime:
+        elapsed = time() - start
+        m, s = divmod(elapsed, 60)
+        h, m = divmod(m, 60)
+        print("Run time: " + "%d:%02d:%02d" % (h, m, s))
 # create the movie
 ctrlStr = 'ffmpeg -r %d -i %s%%05d.png -c:v libx264 -preset slow -crf %d %s' %(frame_ps, directory + '/' + imagename, quality, filename)
 subprocess.call(ctrlStr, shell=True)
