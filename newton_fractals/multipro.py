@@ -48,13 +48,11 @@ quality = 22  # the quality of the encoding
 colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128)]
 
 # generalized newton parameter, a
-a_seq = np.linspace(1.0075, 1.00701, 30)
+a_seq = np.linspace(1.0075, 1.00701, 3000)
 inds = range(len(a_seq))
 a_sequence = np.nditer(a_seq, ['c_index'])
 
 # create image sequence
-
-p = Pool(3)
 
 
 def worker_fun(i):
@@ -77,10 +75,4 @@ def worker_fun(i):
         print("Frame " + str(i) + ' of ' + str(a_seq.size) + ' took ' + "%d:%02d:%02d" % (h, m, s))
 
 
-p.map(worker_fun, inds)
-p.close()
 
-# create the movie
-ctrlStr = 'ffmpeg -r %d -i %s%%05d.png -c:v libx264 -preset slow -crf %d %s' % (
-frame_ps, directory + '/' + imagename, quality, filename)
-subprocess.call(ctrlStr, shell=True)
