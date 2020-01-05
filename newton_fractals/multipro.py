@@ -5,15 +5,13 @@
 import numpy as np
 from newton_fractals import general_newton as gn
 from newton_fractals import test_fun as tf
-import subprocess
-from multiprocessing import Pool
 import os
 import shutil
 from time import time
 
 # movie to be created
-directory = "fractal_videos/fractal_stills4"
-filename = "newton_fractal4.avi"
+directory = "fractal_videos/fractal_stills5"
+filename = "newton_fractal5.avi"
 imagename = "fractal"
 disptime = True
 
@@ -50,7 +48,7 @@ colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128)]
 # generalized newton parameter, a
 a_seq = np.linspace(1.0075, 1.00701, 3000)
 inds = range(len(a_seq))
-a_sequence = np.nditer(a_seq, ['c_index'])
+
 
 # create image sequence
 
