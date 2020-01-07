@@ -10,8 +10,8 @@ import shutil
 from time import time
 
 # movie to be created
-directory = "fractal_videos/fractal_stills5"
-filename = "newton_fractal5.avi"
+directory = "fractal_videos/fractal_stills6"
+filename = "newton_fractal6.avi"
 imagename = "fractal"
 disptime = True
 
@@ -23,9 +23,9 @@ else:
     os.makedirs(directory)
 
 # create grid of complex numbers
-re_lim = [-0.25, 0.25]
+re_lim = [-0.125, 0.125]
 re_num = 1000
-im_lim = [-0.25, 0.25]
+im_lim = [-0.125, 0.125]
 im_num = 1000
 Z = gn.complex_grid(re_lim, re_num, im_lim, im_num)
 
@@ -46,7 +46,7 @@ quality = 22  # the quality of the encoding
 colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128)]
 
 # generalized newton parameter, a
-a_seq = np.linspace(1.0075, 1.00701, 3000)
+a_seq = np.linspace(1.0072, 1.00701, 30000)
 inds = range(len(a_seq))
 
 
@@ -62,10 +62,10 @@ def worker_fun(i):
     print('Creating frame ' + str(i) + ' of ' + str(a_seq.size) + ' with alpha =' + str(a))
 
     # newton's method
-    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=1000, tol=1e-3, a=a, disp_time=False, known_roots=known_roots)
+    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=5000, tol=1e-3, a=a, disp_time=False, known_roots=known_roots)
 
     # create image in folder
-    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=1000)
+    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=5000)
     if disptime:
         elapsed = time() - start
         m, s = divmod(elapsed, 60)

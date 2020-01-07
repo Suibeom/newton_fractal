@@ -9,8 +9,8 @@ from multiprocessing import Pool
 import time
 
 # movie to be created
-directory = "fractal_videos/fractal_stills5"
-filename = "newton_fractal5.avi"
+directory = "fractal_videos/fractal_stills6"
+filename = "newton_fractal6.avi"
 imagename = "fractal"
 
 # frame parameters
