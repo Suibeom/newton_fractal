@@ -5,27 +5,35 @@
 import numpy as np
 from newton_fractals import multipro as mp
 import subprocess
-from multiprocessing import Pool
+import multiprocessing
 import time
+import glob
+import re
 
 # movie to be created
-directory = "fractal_videos/fractal_stills6"
-filename = "newton_fractal6.avi"
+directory = "fractal_videos/fractal_stills14"
+filename = "newton_fractal14.avi"
 imagename = "fractal"
+
+existing_files = glob.glob("./"+directory + "/" + imagename +"*.png")
+frame_match_regex = r"\./" + re.escape(directory) + r"/" + re.escape(imagename) + r"(\d{5}).png"
+existing_frames = [int(re.match(frame_match_regex, file)[1]) for file in existing_files]
 
 # frame parameters
 vid_len = 5  # length of gif
-frame_ps = 18  # number of frames per second
+frame_ps = 30  # number of frames per second
 quality = 22  # the quality of the encoding
 
 # colors
 
 # generalized newton parameter, a
-inds = range(len(mp.a_seq))
+inds = [a for a in range(len(mp.a_seq)) if a not in existing_frames]
 
 # create image sequence
 
-p = Pool(4)
+#mp.worker_fun(1)
+
+p = multiprocessing.Pool(multiprocessing.cpu_count())
 
 rs = p.map_async(mp.worker_fun, inds, chunksize=5)
 p.close()

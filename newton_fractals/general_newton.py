@@ -4,7 +4,7 @@
 
 import numpy as np
 from numba import jit
-from PIL import Image
+from PIL import Image, ImageFilter
 from time import time
 import matplotlib.cm as cm
 
@@ -41,7 +41,7 @@ newton_method()
 ============================================================"""
 
 
-def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0, disp_time=True,
+def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0, a0=np.nan, a1=np.nan, disp_time=True,
                   known_roots=None):
     # record run time
     if disp_time:
@@ -49,7 +49,7 @@ def newton_method(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10,
 
     # put in different form for increased computation speed
 
-    con_num, con_val = run_newton_iterations(Z, f_val, df_val, params, max_iter, tol, div_val, a)
+    con_num, con_val = run_newton_iterations(Z, f_val, df_val, params, max_iter, tol, div_val, a, a0, a1)
     im_num, re_num = Z.shape
     con_root = np.nan * np.ones((im_num, re_num))
     roots, con_root = process_roots(con_val, con_root, known_roots, tol, im_num, re_num)
@@ -66,12 +66,12 @@ def sqfrac(z_old, z_new):
 def sqnorm(z):
     return np.imag(z)**2 + np.real(z)**2
 
-def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0):
+def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_val=1e10, a=1.0, a0= np.nan, a1 = np.nan):
     im_num, re_num = Z.shape
     total_num = re_num * im_num
     ind = np.arange(total_num)
     Z_old = np.reshape(Z, (total_num))
-    Z_mean = np.reshape(Z, (total_num))
+    a = np.random.random(total_num)*(a1-a0) + a0
     tol_sq = tol**2
     div_sq = div_val**2
 
@@ -87,7 +87,6 @@ def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_v
 
         # update newton step
         Z_new = Z_old - a * (f_val(Z_old, **params) / df_val(Z_old, **params))
-
         # check for divergence
         div = np.array(np.where(sqnorm(Z) >= div_sq))  # note: covers divide by zero errors
         con_num[ind[div]] = i
@@ -114,6 +113,7 @@ def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_v
         mask[div] = 0
         mask[con] = 0
         Z_old = Z_old[mask]
+        a = a[mask]
         # Z_mean = Z_mean[mask]
         ind = ind[mask]
 
@@ -245,7 +245,7 @@ def color_root(root_num, con_num, colors, c_num, max_shade):
     if np.isnan(root_num):
         return 0, 0, 0
     else:
-        shade = 1.0 - 1.01 ** (con_num - max_shade)
+        shade = 1.0 - 1.005 ** (con_num - max_shade)
         col = colors[int(root_num) % c_num, :]
         return np.round(col[0] * shade),np.round(col[1] * shade),np.round(col[2] * shade)
 
@@ -260,6 +260,8 @@ def newton_plot(con_root, con_num, colors, save_path=None, max_shade=None):
     # create image object and fill with RGB data
     img = Image.new("RGB", (re_num, im_num))
     img.putdata(data)
+    blur = ImageFilter.BoxBlur(0.05)
+    img = img.filter(blur)
 
     # save image if save path given
     if save_path:

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: fractal-art-robot
+        labels:
+                app: newton-fractal
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: newton-fractal
+        template:
+                metadata:
+                        labels:
+                                app: newton-fractal
+                spec:
+                        containers:
+                              - name: artfart
+                                image: fractalart.azurecr.io/art/newton_fractal
+                                ports:
+                                - containerPort: 23
+                                volumeMounts:
+                                      - name: azure
+                                        mountPath: /newton_fractals/newton_fractals/fractal_videos/
+                        volumes:
+                              - name: azure
+                                azureDisk:
+                                        kind: Managed
+                                        diskName: myAKSDisk
+                                        diskURI: /subscriptions/7f6bfe99-e230-44eb-b2ef-45d2e90062f2/resourceGroups/MC_art_moecluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk

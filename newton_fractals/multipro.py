@@ -18,9 +18,9 @@ disptime = True
 # create directory
 if not os.path.exists(directory):
     os.makedirs(directory)
-else:
-    shutil.rmtree(directory)
-    os.makedirs(directory)
+#else:
+#    shutil.rmtree(directory)
+#    os.makedirs(directory)
 
 # create grid of complex numbers
 re_lim = [-0.125, 0.125]
@@ -55,6 +55,8 @@ inds = range(len(a_seq))
 
 def worker_fun(i):
     a = a_seq[i]
+    a0 = a_seq[i]
+    a1 = a_seq[i+1]
 
     if disptime:
         start = time()
@@ -62,10 +64,10 @@ def worker_fun(i):
     print('Creating frame ' + str(i) + ' of ' + str(a_seq.size) + ' with alpha =' + str(a))
 
     # newton's method
-    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=5000, tol=1e-3, a=a, disp_time=False, known_roots=known_roots)
+    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=1500, tol=1e-3,a0 = a0, a1 = a1, disp_time=False, known_roots=known_roots)
 
     # create image in folder
-    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=5000)
+    gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=1500)
     if disptime:
         elapsed = time() - start
         m, s = divmod(elapsed, 60)
