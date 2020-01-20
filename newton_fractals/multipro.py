@@ -43,7 +43,7 @@ frame_ps = 18  # number of frames per second
 quality = 22  # the quality of the encoding
 
 # colors
-colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128)]
+colors = [(0, 255, 255), (128, 128, 255), (255, 0, 255), (255, 128, 128), (255, 255, 255), (255,255,255)]
 
 # generalized newton parameter, a
 a_seq = np.linspace(1.0072, 1.00701, 30000)
@@ -64,7 +64,7 @@ def worker_fun(i):
     print('Creating frame ' + str(i) + ' of ' + str(a_seq.size) + ' with alpha =' + str(a))
 
     # newton's method
-    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=1500, tol=1e-3,a0 = a0, a1 = a1, disp_time=False, known_roots=known_roots)
+    roots, con_root, con_num = gn.newton_method(Z, f_val, df_val, params, max_iter=1500, tol=1e-4,a0 = a0, a1 = a1, disp_time=False, known_roots=known_roots)
 
     # create image in folder
     gn.newton_plot(con_root, con_num, colors, save_path=img_file_name, max_shade=1500)

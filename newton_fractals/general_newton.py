@@ -71,6 +71,7 @@ def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_v
     total_num = re_num * im_num
     ind = np.arange(total_num)
     Z_old = np.reshape(Z, (total_num))
+    Z_mean = Z_old
     a = np.random.random(total_num)*(a1-a0) + a0
     tol_sq = tol**2
     div_sq = div_val**2
@@ -91,30 +92,33 @@ def run_newton_iterations(Z, f_val, df_val, params, max_iter=50, tol=1e-5, div_v
         div = np.array(np.where(sqnorm(Z) >= div_sq))  # note: covers divide by zero errors
         con_num[ind[div]] = i
 
+        # check for convergence in mean
+        if i >= 50:
+            j = i - 50
+            Z_new_mean = Z_mean * (j / (j + 1)) + Z_new / (i + 1)
+            per = np.array(np.where(sqfrac(Z_mean, Z_new_mean) < tol_sq))
+            #print("Convergence in mean occurred")
+            con_num[ind[per]] = i
+            con_val[ind[per]] = Z_new_mean[per]
+
         # check for convergence
         con = np.array(np.where(sqfrac(Z_old, Z_new) < tol_sq))
         con_val[ind[con]] = Z_new[con]
         con_num[ind[con]] = i
 
-        # Z_new_mean = Z_mean * ((i + 1) / i) + Z_new / (i + 1)
-        # check for convergence in mean
-        # if i > 2:
-        #    con = np.array(np.where(abs((Z_mean-Z_new_mean)/Z_new_mean) < tol))
-        #    print("Convergence in mean occurred")
-        #    con_val[ind[con]] = Z_new_mean[con]
-        #    con_num[ind[con]] = i
 
         # update iterate
         Z_old = Z_new
-        # Z_mean = Z_new_mean
 
         # remove converged and diverged points
         mask = np.ones(Z_old.shape, dtype=bool)
         mask[div] = 0
         mask[con] = 0
+        if i > 50:
+            mask[per] = 0
         Z_old = Z_old[mask]
         a = a[mask]
-        # Z_mean = Z_mean[mask]
+        Z_mean = Z_mean[mask]
         ind = ind[mask]
 
         # break if all points have converged or diverged
